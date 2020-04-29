@@ -13,6 +13,7 @@ import java.sql.SQLException;
  * @author cipri
  */
 public class ConnectionFactory {
+    
     public java.sql.Connection connector(){
         try{
             return DriverManager.getConnection("jdbc:mysql://localhost/Pokedex_js","root","");
