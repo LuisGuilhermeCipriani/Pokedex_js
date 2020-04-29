@@ -7,8 +7,13 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import model.Pokemon;
+import model.Tipo;
 import util.ConnectionFactory;
 
 /**
@@ -33,6 +38,29 @@ public class PokemonDao {
             
         }catch(SQLException ex){
             throw new RuntimeException("Erro ao inserir Pokemon" + ex);
+        }
+    }
+    
+    public List<Pokemon> buscar(){
+        Connection conexao = new ConnectionFactory().connector();
+        String sql = "SELECT * FROM pokemon";
+        List<Pokemon> lista = new ArrayList<>();
+        try{
+            Statement stmt = conexao.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            while(rs.next()){
+                Pokemon pokemon = new Pokemon();
+                pokemon.setNome(rs.getString("nome"));
+                pokemon.setAnterior(rs.getString("anterior"));
+                pokemon.setProximo(rs.getString("proximo"));
+                pokemon.setID(rs.getInt("ID"));
+                pokemon.setTipo(Tipo.valueOf(rs.getString("tipo")));
+                lista.add(pokemon);
+            }
+            return lista;
+        }catch(SQLException ex){
+            throw new RuntimeException("Erro ao buscar Pokemon" + ex);
         }
     }
 }
